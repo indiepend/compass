@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<CarouselPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core" 
+             xmlns:local="clr-namespace:App_Comps"
+             x:Class="App_Comps.MainPage">
+
+    <ContentPage>
+        <StackLayout Spacing="0">
+            <RelativeLayout>
+            <Image Source="comp.png" x:Name="image22"/>
+           
+            <Image Source="arrow.png" x:Name="arrow" IsVisible="False" RelativeLayout.XConstraint="0" RelativeLayout.YConstraint="0"/>
+            </RelativeLayout>
+            
+            <Label Text="latitude: " 
+           HorizontalOptions="Center"
+           VerticalOptions="Center" />
+            <Label Text="----------" 
+           HorizontalOptions="Center"
+           VerticalOptions="Center" 
+           x:Name="firstloc"/>
+          
+            <Label Text="longitude: " 
+           HorizontalOptions="Center"
+           VerticalOptions="Center" />
+            <Label Text="----------"
+           HorizontalOptions="Center"
+           VerticalOptions="Center" 
+           x:Name="secondloc"/>
+
+          <Label Text=""
+                 HorizontalOptions="Center"
+                 x:Name="distLbl"/>
+          <Label Text=""
+                 HorizontalOptions="Center"
+                 x:Name="latcoordLbl"/>
+          <Label Text=""
+                 HorizontalOptions="Center"
+                 x:Name="loncoordLbl"/>
+        </StackLayout>
+    </ContentPage>
+    <ContentPage>
+        <StackLayout>
+            <Label FontSize="Medium" Text="Enter coordinates: "/>
+            <Label FontSize="Small" Text="longitude: " />
+            <Entry Placeholder="in decimal degrees e.g. 38.3459918" MaxLength="10" Keyboard="Numeric" x:Name="firstcoord"/>
+
+            <Label FontSize="Small" Text="latitude: " />
+            <Entry Placeholder="in decimal degrees e.g. 88.6123272" MaxLength="10" Keyboard="Telephone" x:Name="secondcoord"/>
+
+            <Label FontSize="Medium" Text="or enter adress: "/>
+            <Entry Placeholder="e.g. Wayne City Illinois 62895" x:Name="addrforsearch"/>
+
+            <Button FontSize="Large" Text="Select" Clicked="Searching"/>
+
+            <Button VerticalOptions="End" FontSize="Medium" Text="Use Google Maps"/>
+        </StackLayout>
+    </ContentPage>
+    <ContentPage x:Name="historypage">
+        <StackLayout x:Name="historylayout">
+            <Label FontSize="Large"  Text="History: "/>
+            <ListView x:Name="historia">
+                <ListView.ItemTemplate>
+                    <DataTemplate x:Name="wtf">
+                        <TextCell x:Name="komora" Text="{Binding}">
+                            <TextCell.ContextActions>
+                                <MenuItem Clicked="onDelete" Text="Delete" CommandParameter="{Binding .}" IsDestructive="True"/>
+                            </TextCell.ContextActions>
+
+
+                            <!--<StackLayout>
+                            <Label Text="{Binding coordinates}" />
+                            </StackLayout>-->
+
+                        </TextCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage>
+</CarouselPage>
