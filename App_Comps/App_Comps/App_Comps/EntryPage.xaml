@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App_Comps.EntryPage"
+             x:Name="entrypage"
+             x:FieldModifier="public"
+             Title="Main"
+             NavigationPage.HasNavigationBar="True">
+    <ContentPage.Resources>
+        <Style TargetType="Label">
+            <Setter Property="VerticalOptions" Value="EndAndExpand"/>
+            <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
+        </Style>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout Padding="0">
+            <RelativeLayout VerticalOptions="Start" HorizontalOptions="Start">
+                <Image Source="low.png" 
+                       x:Name="image22" 
+                       x:FieldModifier="public"/>
+
+                <Image Source="top.png"
+                   />
+
+                <Image Source="arrow.png" 
+                       x:Name="arrow" 
+                       x:FieldModifier="public" 
+                       IsVisible="False" 
+                   />
+            </RelativeLayout>
+
+            <StackLayout VerticalOptions="StartAndExpand" HorizontalOptions="Center">
+                <Frame x:Name="frame" 
+                       BorderColor="DarkGray" 
+                       CornerRadius="10" 
+                       Padding="5" 
+                       IsVisible="False">
+                    <Label Text=""
+                 HorizontalOptions="Center"
+                 x:Name="distLbl"
+                 FontSize="30"
+                 Margin="0,0,0,0"/>
+                </Frame>
+
+                <Label Text=""
+                 HorizontalOptions="Center"
+                 x:Name="loncoordLbl"
+                   Margin="0,0,0,0"/>
+
+                <Label Text=""
+                 HorizontalOptions="Center"
+                 x:Name="latcoordLbl"
+                   Margin="0,0,0,0"/>
+            </StackLayout>
+
+            <StackLayout Orientation="Horizontal" VerticalOptions="End" HorizontalOptions="CenterAndExpand">
+                <Frame BackgroundColor="LightGray" Padding="10,20,10,20" HorizontalOptions="Fill" VerticalOptions="Fill">
+                    <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
+                        <Label Text=""
+                            x:Name="secondloc"
+                            HorizontalOptions="Center"
+                           TextColor="DarkSlateGray"/>
+                        <Label Text="" 
+                            x:Name="firstloc"
+                            HorizontalOptions="Center"
+                           TextColor="DarkSlateGray"/>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
