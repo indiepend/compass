@@ -11,7 +11,6 @@ namespace App_Comps
         {
             InitializeComponent();
 
-
             MainPage = new MainPage();
  
         }

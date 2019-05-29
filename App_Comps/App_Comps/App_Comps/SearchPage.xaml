@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App_Comps.SearchPage"
+             x:Name="searchpage"
+             x:FieldModifier="public"
+             Title="Search"
+             NavigationPage.HasNavigationBar="True">
+    <ContentPage.Content>
+        <StackLayout Spacing="10">
+            <Label FontSize="Medium" Text="Enter coordinates: " Margin="5,15,0,0"/>
+            <Label FontSize="Small" Text="longitude: " Margin="5,0,0,0"/>
+            <Entry Placeholder="in decimal degrees e.g. 38.3459918" MaxLength="10" Keyboard="Numeric" x:Name="firstcoord" Margin="0,-7,0,0"/>
+
+            <Label FontSize="Small" Text="latitude: " Margin="5,-3,0,0"/>
+            <Entry Placeholder="in decimal degrees e.g. 88.6123272" MaxLength="10" Keyboard="Numeric" x:Name="secondcoord" Margin="0,-7,0,0"/>
+
+
+            <Label FontSize="Medium" Text="...or enter adress: " Margin="5,90,0,0"/>
+            <Entry Placeholder="e.g. Wayne City Illinois 62895" x:Name="addrforsearch" Margin="0,-7,0,0"/>
+            
+            
+            <Button FontSize="Large" Text="Select" Clicked="Trigger" Margin="0,130,0,0" HeightRequest="75"/>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>
