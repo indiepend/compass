@@ -109,6 +109,10 @@ namespace App_Comps
             }
             AppVariables.location.Longitude = AppVariables.coordsList[int.Parse(_temp) - 1].longitude;//passes new coordinates
             AppVariables.location.Latitude = AppVariables.coordsList[int.Parse(_temp) - 1].latitude;
+            MessagingCenter.Send(this, "gobackSend");//tell main page to swipe us back
+
+            Trytofind trytofind = new Trytofind();
+            trytofind.check();//checks if there's already destination and calculates distance and new angle for arrow; find it in EntryPage.xaml.cs
         }
     }
 }

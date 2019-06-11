@@ -17,6 +17,8 @@ namespace App_Comps
         public SearchPage()
         {
             InitializeComponent();
+            //MessagingCenter.Subscribe<Searcher, string>(this, "msgSend", (sender, e) => { _lat = e; });
+            
             search = new Searcher();
             search.Receiver();
         }
@@ -68,14 +70,28 @@ namespace App_Comps
 
             }
 
-            if (AppVariables.location != null)//if there's location like that
+            if (AppVariables.location != null)//if there's location found
             {
                 var newCoord = new HistoryDatabase();
                 newCoord.latitude = AppVariables.location.Latitude;//sets as new location to go
                 newCoord.longitude = AppVariables.location.Longitude;
                 newCoord.address = null;//not added yet
                 AppVariables.db.Insert(newCoord);//insert location to database
+                MessagingCenter.Send(this, "gobackSend");//tell main page to swipe us back
+
+                Trytofind trytofind = new Trytofind();
+                trytofind.check();//checks if there's already destination and calculates distance and new angle for arrow; find it in EntryPage.xaml.cs
+            }
+            else
+            {
+                DependencyService.Get<IMessage>().LongAlert("Wrong coordinates or address");
             }
         }
+}
+
+    public interface IMessage //interface for toast messages, more in ToastMsg.cs
+    {
+        void LongAlert(string message);
+        void ShortAlert(string message);
     }
 }

@@ -6,6 +6,8 @@ using System.Text;
 using Xamarin.Forms;
 using Xamarin.Essentials;
 using SQLite;
+
+
 namespace App_Comps
 {
 
@@ -16,8 +18,17 @@ namespace App_Comps
             Children.Add(new EntryPage());
             Children.Add(new SearchPage());
             Children.Add(new HistoryPage());
+
+            MessagingCenter.Subscribe<Searcher>(this, "gobackSend", (sender) => { GoToFirstPage(); });
+            MessagingCenter.Subscribe<Database>(this, "gobackSend", (sender) => { GoToFirstPage(); });
+        }
+
+        public void GoToFirstPage()//as name says
+        {
+            CurrentPage = Children[0];
         }
     }
+
     class Coords
     {
         public double longitude;
