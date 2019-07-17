@@ -17,7 +17,6 @@ namespace App_Comps
         public SearchPage()
         {
             InitializeComponent();
-            //MessagingCenter.Subscribe<Searcher, string>(this, "msgSend", (sender, e) => { _lat = e; });
             
             search = new Searcher();
             search.Receiver();
@@ -28,7 +27,6 @@ namespace App_Comps
         {
             MessagingCenter.Send(this, "latSend", firstcoord.Text);
             MessagingCenter.Send(this, "lonSend", secondcoord.Text);
-
             MessagingCenter.Send(this, "addrSend", addrforsearch.Text);
         }
 
@@ -52,30 +50,32 @@ namespace App_Comps
 
         async public void Searching()//searches for such input
         {
-
+            bool _flag = false;
             if (_lon != null && _lat != null)//there's longitude and latitude entered
             {
                 AppVariables.location = new Location();
                 AppVariables.location.Latitude = Double.Parse(_lat);
                 AppVariables.location.Longitude = Double.Parse(_lon);
+                _flag = true;
             }
             else if (_addr != null)//there's address entered
             {
                 AppVariables.location = new Location();
                 var locations = await Geocoding.GetLocationsAsync(_addr);//looks for location
                 AppVariables.location = locations?.FirstOrDefault();//sets location found or sets null
+                _flag = true;
             }
             else//nothing entered just button clicked
             {
 
             }
 
-            if (AppVariables.location != null)//if there's location found
+            if (AppVariables.location != null && _flag)//if there's location found
             {
                 var newCoord = new HistoryDatabase();
                 newCoord.latitude = AppVariables.location.Latitude;//sets as new location to go
                 newCoord.longitude = AppVariables.location.Longitude;
-                newCoord.address = null;//not added yet
+                newCoord.note = null;//not added yet
                 AppVariables.db.Insert(newCoord);//insert location to database
                 MessagingCenter.Send(this, "gobackSend");//tell main page to swipe us back
 
@@ -83,9 +83,7 @@ namespace App_Comps
                 trytofind.check();//checks if there's already destination and calculates distance and new angle for arrow; find it in EntryPage.xaml.cs
             }
             else
-            {
                 DependencyService.Get<IMessage>().LongAlert("Wrong coordinates or address");
-            }
         }
 }
 

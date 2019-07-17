@@ -3,6 +3,7 @@
   <PropertyGroup>
     <SelectedDevice>Xiaomi Redmi 6</SelectedDevice>
     <DefaultDevice>my_device2</DefaultDevice>
-    <AndroidDesignerPreferredDevice>Nexus 4</AndroidDesignerPreferredDevice>
+    <AndroidDesignerPreferredDevice>Nexus 5</AndroidDesignerPreferredDevice>
+    <AndroidDesignerPreferredTheme>Theme.AppCompat.DayNight</AndroidDesignerPreferredTheme>
   </PropertyGroup>
 </Project>
