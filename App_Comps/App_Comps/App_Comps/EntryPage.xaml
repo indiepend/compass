@@ -5,7 +5,8 @@
              x:Name="entrypage"
              x:FieldModifier="public"
              Title="Main"
-             NavigationPage.HasNavigationBar="True">
+             NavigationPage.HasNavigationBar="True"
+             BackgroundColor="#1F1F1F">
     <ContentPage.Resources>
         <Style TargetType="Label">
             <Setter Property="VerticalOptions" Value="EndAndExpand"/>
@@ -34,36 +35,44 @@
                        BorderColor="DarkGray" 
                        CornerRadius="10" 
                        Padding="5" 
-                       IsVisible="False">
+                       IsVisible="False"
+                       BackgroundColor="#4F4F4F">
                     <Label Text=""
-                 HorizontalOptions="Center"
-                 x:Name="distLbl"
-                 FontSize="30"
-                 Margin="0,0,0,0"/>
+                        HorizontalOptions="Center"
+                         x:Name="distLbl"
+                        FontSize="30"
+                        Margin="0,0,0,0"
+                           TextColor="LightGray"/>
                 </Frame>
 
                 <Label Text=""
                  HorizontalOptions="Center"
                  x:Name="loncoordLbl"
-                   Margin="0,0,0,0"/>
+                   Margin="0,0,0,0"
+                  TextColor="LightGray"
+                       FontSize="Large"
+                       FontAttributes="Bold"/>
 
                 <Label Text=""
                  HorizontalOptions="Center"
                  x:Name="latcoordLbl"
-                   Margin="0,0,0,0"/>
+                   Margin="0,0,0,0"
+                      TextColor="LightGray"
+                       FontSize="Large"
+                       FontAttributes="Bold"/>
             </StackLayout>
 
             <StackLayout Orientation="Horizontal" VerticalOptions="End" HorizontalOptions="CenterAndExpand">
-                <Frame BackgroundColor="LightGray" Padding="10,20,10,20" HorizontalOptions="Fill" VerticalOptions="Fill">
+                <Frame BackgroundColor="#151515" Padding="10,20,10,20" HorizontalOptions="Fill" VerticalOptions="Fill">
                     <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                         <Label Text=""
                             x:Name="secondloc"
                             HorizontalOptions="Center"
-                           TextColor="DarkSlateGray"/>
+                           TextColor="LightGray"/>
                         <Label Text="" 
                             x:Name="firstloc"
                             HorizontalOptions="Center"
-                           TextColor="DarkSlateGray"/>
+                           TextColor="LightGray"/>
                     </StackLayout>
                 </Frame>
             </StackLayout>

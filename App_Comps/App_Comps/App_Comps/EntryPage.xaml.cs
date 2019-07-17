@@ -122,4 +122,9 @@ namespace App_Comps
             }
         }
     }
+
+    public interface ISensorEventListener
+    {
+        void isCalibrated();
+    }
 }

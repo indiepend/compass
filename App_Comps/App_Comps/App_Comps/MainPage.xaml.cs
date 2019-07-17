@@ -34,6 +34,8 @@ namespace App_Comps
         public double longitude;
         public double latitude;
         public string address;
+        public int visits { get; set; }
+        public bool isFav { get; set; }
 
         public override string ToString()
         {
