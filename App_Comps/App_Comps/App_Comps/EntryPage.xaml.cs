@@ -25,18 +25,18 @@ namespace App_Comps
             finder.Run();
 		}
 
-        public void SubscribeForObjects()//listens for changes
+        public void SubscribeForObjects()//listens for changes; check code below for explanations
         {
-            MessagingCenter.Subscribe<CompassInterface,double>(this, "imageSend", (sender,e) => { image22.Rotation = e; });
-            MessagingCenter.Subscribe<CompassInterface, double>(this, "arrowSend", (sender, e) => { arrow.Rotation = e; });
+            MessagingCenter.Subscribe<CompassInterface,double>(this, "imageSend", (sender,e) => { compassImg.Rotation = e; });
+            MessagingCenter.Subscribe<CompassInterface, double>(this, "arrowSend", (sender, e) => { arrowImg.Rotation = e; });
 
-            MessagingCenter.Subscribe<CoordinatesFinder, string>(this, "latSend", (sender, e) => { firstloc.Text = e; });
-            MessagingCenter.Subscribe<CoordinatesFinder, string>(this, "longSend", (sender, e) => { secondloc.Text = e; });
+            MessagingCenter.Subscribe<CoordinatesFinder, string>(this, "longSend", (sender, e) => { currentLon.Text = e; });
+            MessagingCenter.Subscribe<CoordinatesFinder, string>(this, "latSend", (sender, e) => { currentLat.Text = e; });
 
-            MessagingCenter.Subscribe<Trytofind, bool>(this, "arrowVisSend", (sender, e) => { arrow.IsVisible = e; frame.IsVisible = e; });
+            MessagingCenter.Subscribe<Trytofind, bool>(this, "arrowVisSend", (sender, e) => { arrowImg.IsVisible = e; frame.IsVisible = e; });
             MessagingCenter.Subscribe<Trytofind, string>(this, "distSend", (sender, e) => { distLbl.Text = e; });
-            MessagingCenter.Subscribe<Trytofind, string>(this, "aimlatSend", (sender, e) => { latcoordLbl.Text = e; });
-            MessagingCenter.Subscribe<Trytofind, string>(this, "aimlongSend", (sender, e) => { loncoordLbl.Text = e; });
+            MessagingCenter.Subscribe<Trytofind, string>(this, "aimlatSend", (sender, e) => { latCoordLbl.Text = e; });
+            MessagingCenter.Subscribe<Trytofind, string>(this, "aimlongSend", (sender, e) => { lonCoordLbl.Text = e; });
         }
 	}
 
@@ -45,19 +45,19 @@ namespace App_Comps
         public CompassInterface()//Subscribing to event
         {
             Compass.ReadingChanged += CompassReadingChanged;
-            //if compass turns it triggers method below
+            //if phone turns it triggers method below
         }
 
        public void CompassReadingChanged(object sender, CompassChangedEventArgs e)
        {
             var _data = e.Reading;
-            MessagingCenter.Send(this, "imageSend", -_data.HeadingMagneticNorth);//sends new rotation of compass
+            MessagingCenter.Send(this, "imageSend", -_data.HeadingMagneticNorth);//sends new rotation of compass to EntryPage class
             MessagingCenter.Send(this, "arrowSend", -_data.HeadingMagneticNorth - AppVariables.alpha);//sends new rotation of arrow
        }
 
         public static void ToggleCompass()//toggles compass on and off - used in MainActivity class
         {
-            SensorSpeed speed = SensorSpeed.UI;
+            SensorSpeed speed = SensorSpeed.Game;//sensor speed
             if (Compass.IsMonitoring)
                 Compass.Stop();
             else
@@ -83,22 +83,22 @@ namespace App_Comps
                     MessagingCenter.Send(this, "longSend", "long.: " + _position.Longitude.ToString());
 
                     Trytofind trytofind = new Trytofind();
-                    trytofind.check();//explanation below
+                    trytofind.Check();//explanation below
                 }
             }
         }
     }
 
     public class Trytofind {//checks if there's already destination and calculates distance and new angle for arrow
-        public void check()
+        public void Check()
         {
-            if (AppVariables.location != null && AppVariables.phoneloc != null)//if there is destination choosen
+            if (AppVariables.location != null && AppVariables.phoneloc != null)//if there is destination chosen
             {
                 MessagingCenter.Send(this, "aimlatSend", "lat.: " + AppVariables.location.Latitude.ToString());//sends new destination
                 MessagingCenter.Send(this, "aimlongSend", "long.: " + AppVariables.location.Longitude.ToString());
 
                 double dist = Location.CalculateDistance(AppVariables.location, AppVariables.phoneloc, DistanceUnits.Kilometers);//calculates distance between user and destination point
-                double y = Location.CalculateDistance(AppVariables.phoneloc, AppVariables.location.Latitude, AppVariables.phoneloc.Longitude, DistanceUnits.Kilometers);//that's additional distance needed to calculate radius
+                double y = Location.CalculateDistance(AppVariables.phoneloc, AppVariables.location.Latitude, AppVariables.phoneloc.Longitude, DistanceUnits.Kilometers);//that's additional distance needed to calculate angle
                 AppVariables.alpha = (180 * Math.Acos(y / dist)) / 3.1416;//that result is okay when aim is in second quadrant
                 if (AppVariables.phoneloc.Longitude < AppVariables.location.Longitude)//when result is in first or forth
                 {
@@ -107,7 +107,7 @@ namespace App_Comps
                     else
                         AppVariables.alpha = -AppVariables.alpha;//first
                 }
-                else if (AppVariables.phoneloc.Latitude > AppVariables.location.Latitude)//when result is in third or forth
+                else if (AppVariables.phoneloc.Latitude > AppVariables.location.Latitude)//when result is in third
                     AppVariables.alpha = 180 - AppVariables.alpha;
 
 
