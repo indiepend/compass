@@ -7,12 +7,12 @@
              Title="Archive"
              NavigationPage.HasNavigationBar="True">
     <ContentPage.Content>
-        <StackLayout x:Name="historylayout">
+        <StackLayout>
             <Label Margin="10,20,0,0" FontSize="Large"  Text="History: "/>
-            <ListView x:Name="historia">
+            <ListView x:Name="archiveList">
                 <ListView.ItemTemplate>
-                    <DataTemplate x:Name="wtf">
-                        <TextCell x:Name="komora" Text="{Binding}" >
+                    <DataTemplate>
+                        <TextCell Text="{Binding}" >
                             <TextCell.ContextActions>
                                 <MenuItem Clicked="onDelete" Text="Delete" CommandParameter="{Binding .}" IsDestructive="True"/>
                             </TextCell.ContextActions>

@@ -19,8 +19,8 @@ namespace App_Comps
 		{
 			InitializeComponent();
             Database database = new Database();
-            historia.ItemSelected += database.HistoriaSelected;//when location is selected from list it triggers this method
-            historia.ItemsSource = AppVariables.coordinatesList;//takes coordinates from database as source
+            archiveList.ItemSelected += database.HistoriaSelected;//when location is selected from list it triggers this method
+            archiveList.ItemsSource = AppVariables.coordinatesList;//takes coordinates from database as source
         }
 
         void onDelete(object sender, EventArgs e)//it going around method to delete location from list
@@ -119,7 +119,7 @@ namespace App_Comps
             MessagingCenter.Send(this, "gobackSend");//tell main page to swipe us back
 
             Trytofind trytofind = new Trytofind();
-            trytofind.check();//checks if there's already destination and calculates distance and new angle for arrow; find it in EntryPage.xaml.cs
+            trytofind.Check();//checks if there's already destination and calculates distance and new angle for arrow; find it in EntryPage.xaml.cs
         }
     }
 }

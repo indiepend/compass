@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Xamarin.Forms;
-using Xamarin.Essentials;
-using SQLite;
+﻿using Xamarin.Forms;
 
 
 namespace App_Comps
@@ -15,11 +8,11 @@ namespace App_Comps
     {
         public MainPage()
         {
-            Children.Add(new EntryPage());
+            Children.Add(new EntryPage());//adds tabs to tabbed page
             Children.Add(new SearchPage());
             Children.Add(new HistoryPage());
 
-            MessagingCenter.Subscribe<Searcher>(this, "gobackSend", (sender) => { GoToFirstPage(); });
+            MessagingCenter.Subscribe<Searcher>(this, "gobackSend", (sender) => { GoToFirstPage(); });//goes to entry page when requested
             MessagingCenter.Subscribe<Database>(this, "gobackSend", (sender) => { GoToFirstPage(); });
         }
 
@@ -27,29 +20,5 @@ namespace App_Comps
         {
             CurrentPage = Children[0];
         }
-    }
-
-    class Coords
-    {
-        public double longitude;
-        public double latitude;
-        public string address;
-        public int visits { get; set; }
-        public bool isFav { get; set; }
-
-        public override string ToString()
-        {
-            return "latitude: " + latitude.ToString() + "longitude: " + longitude.ToString();
-        }
-    }
-
-    class AppVariables//stores variables used throughout application
-    {
-        public static Location phoneloc { get; set; } = new Location();
-        public static Location location { get; set; }
-        public static double alpha { get; set; } = 0;
-        public static SQLiteConnection db;
-        public static System.Collections.ObjectModel.ObservableCollection<string> coordinatesList = new System.Collections.ObjectModel.ObservableCollection<string>();
-        public static List<Coords> coordsList = new List<Coords>();
     }
 }

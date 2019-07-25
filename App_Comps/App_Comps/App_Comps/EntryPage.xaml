@@ -17,14 +17,14 @@
         <StackLayout Padding="0">
             <RelativeLayout VerticalOptions="Start" HorizontalOptions="Start">
                 <Image Source="low.png" 
-                       x:Name="image22" 
+                       x:Name="compassImg" 
                        x:FieldModifier="public"/>
 
                 <Image Source="top.png"
                    />
 
                 <Image Source="arrow.png" 
-                       x:Name="arrow" 
+                       x:Name="arrowImg" 
                        x:FieldModifier="public" 
                        IsVisible="False" 
                    />
@@ -47,7 +47,7 @@
 
                 <Label Text=""
                  HorizontalOptions="Center"
-                 x:Name="loncoordLbl"
+                 x:Name="lonCoordLbl"
                    Margin="0,0,0,0"
                   TextColor="LightGray"
                        FontSize="Large"
@@ -55,7 +55,7 @@
 
                 <Label Text=""
                  HorizontalOptions="Center"
-                 x:Name="latcoordLbl"
+                 x:Name="latCoordLbl"
                    Margin="0,0,0,0"
                       TextColor="LightGray"
                        FontSize="Large"
@@ -66,11 +66,11 @@
                 <Frame BackgroundColor="#151515" Padding="10,20,10,20" HorizontalOptions="Fill" VerticalOptions="Fill">
                     <StackLayout HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand">
                         <Label Text=""
-                            x:Name="secondloc"
+                            x:Name="currentLon"
                             HorizontalOptions="Center"
                            TextColor="LightGray"/>
                         <Label Text="" 
-                            x:Name="firstloc"
+                            x:Name="currentLat"
                             HorizontalOptions="Center"
                            TextColor="LightGray"/>
                     </StackLayout>
