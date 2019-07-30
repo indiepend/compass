@@ -1,25 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<CarouselPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="App_Comps.HistoryPage"
              x:Name="historypage"
              x:FieldModifier="public"
              Title="Archive"
              NavigationPage.HasNavigationBar="True">
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Margin="10,20,0,0" FontSize="Large"  Text="History: "/>
-            <ListView x:Name="archiveList">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <TextCell Text="{Binding}" >
-                            <TextCell.ContextActions>
-                                <MenuItem Clicked="onDelete" Text="Delete" CommandParameter="{Binding .}" IsDestructive="True"/>
-                            </TextCell.ContextActions>
-                        </TextCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackLayout>
-    </ContentPage.Content>
-</ContentPage>
+</CarouselPage>

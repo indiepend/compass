@@ -13,113 +13,73 @@ using Xamarin.Essentials;
 namespace App_Comps
 {
 	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class HistoryPage : ContentPage
+	public partial class HistoryPage : CarouselPage
     {
-		public HistoryPage()
-		{
-			InitializeComponent();
-            Database database = new Database();
-            archiveList.ItemSelected += database.HistoriaSelected;//when location is selected from list it triggers this method
-            archiveList.ItemsSource = AppVariables.coordinatesList;//takes coordinates from database as source
-        }
-
-        void onDelete(object sender, EventArgs e)//it going around method to delete location from list
+        public Database database = new Database();
+        public HistoryPage()
         {
-            var item = ((MenuItem)sender);
-            var cell = item.CommandParameter;
-            int index = AppVariables.coordinatesList.IndexOf(cell.ToString());
-            AppVariables.coordinatesList.Remove(cell.ToString());//first it's removed from listview so can't be seen anymore
-
-            string fast = (cell as string);
-
-            AppVariables.db.Delete<HistoryDatabase>(index);
-
-            string str = "";
-            bool flag = true;
-            index = 0;
-            while (flag)//takes index of deleted location
-            {
-                if (fast[index] != '.')
-                    str += fast[index];
-
-                else
-                    flag = false;
-
-                index++;
-            }
-            //AppVariables.db.Delete<HistoryDatabase>(int.Parse(str) - 1);//deletes location in database by it's index
+            InitializeComponent();
+            Children.Add(new All());
+            Children.Add(new Favourite());
+            MessagingCenter.Subscribe<Favourite>(this, "GoBackSend", (sender) => { CurrentPage = Children[0]; });
+            MessagingCenter.Subscribe<All>(this, "GoBackSend", (sender) => { CurrentPage = Children[1]; });
         }
     }
 
-    [Table("Items")]
-    public class HistoryDatabase
+    [Table("Registry")]
+    public class ArchiveDatabase
     {
         [PrimaryKey, AutoIncrement, Column("_id")]
         public int Id { get; set; }
-        public double longitude { get; set; }
-        public double latitude { get; set; }
-        public string note { get; set; }
-        public double visitsNumber { get; set; }
-        public bool isFavourite { get; set; }
+        public int Time { get; set; }
+        public double Longitude { get; set; }
+        public double Latitude { get; set; }
+        public string Note { get; set; }
+        public double VisitsNumber { get; set; }
+        public bool IsFavourite { get; set; }
     }
 
-    class Database
+    public class Database
     {
         public Database()
         {
-            string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "history.db3");
-            AppVariables.db = new SQLiteConnection(dbPath);//connecting to local database or creating new one
-            AppVariables.db.CreateTable<HistoryDatabase>();
+            string dbPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "archive.db3");//path to database
+            AppVariables.db = new SQLiteConnection(dbPath);//connecting to database or creating new one
+            AppVariables.db.CreateTable<ArchiveDatabase>();//creating table if it doesn't exist
 
-            var _table = AppVariables.db.Table<HistoryDatabase>();
-
-            var _enum = _table.GetEnumerator();
-            _enum.Reset();
+            var _main = AppVariables.db.Query < ArchiveDatabase > ("SELECT * FROM Registry ORDER BY Time DESC");//all records starting from most recent selected
+            var _favourites = AppVariables.db.Query < ArchiveDatabase > ("SELECT * FROM Registry WHERE IsFavourite = 1");//favourites 
+            var _oftenlyVisited = AppVariables.db.Query < ArchiveDatabase > ("SELECT * FROM Registry WHERE VisitsNumber > 5");//ofently visited
+             
+            var _enum = _main.GetEnumerator();
             _enum.MoveNext();
 
             int i = 0;
-            foreach (var k in _table)//populates observable collection with data
+            foreach (var k in _main)//populates main observable collection with data
             {
-
-                if (_enum.Current.note != null)
-                    AppVariables.coordinatesList.Add($"{i + 1}. \n longitude: {_enum.Current.longitude.ToString()} \n latitude: {_enum.Current.latitude.ToString()} \n address: {_enum.Current.note}");
-
-                else
-                    AppVariables.coordinatesList.Add($"{i + 1}. \n longitude: {_enum.Current.longitude.ToString()} \n latitude: {_enum.Current.latitude.ToString()}");
-
                 AppVariables.coordsList.Add(new Coords());
-                AppVariables.coordsList[i].latitude = _enum.Current.latitude;
-                AppVariables.coordsList[i].longitude = _enum.Current.longitude;
-                AppVariables.coordsList[i].isFav = _enum.Current.isFavourite;
+                AppVariables.coordsList[i].latitude = _enum.Current.Latitude;
+                AppVariables.coordsList[i].longitude = _enum.Current.Longitude;
+                AppVariables.coordsList[i].Id = _enum.Current.Id;
+                AppVariables.coordsList[i].note = _enum.Current.Note;
+                AppVariables.coordsList[i].IsFav = _enum.Current.IsFavourite;
                 _enum.MoveNext();
                 i++;
             }
-
-        }
-
-        public void HistoriaSelected(object sender, EventArgs e)//triggered when cell selected
-        {
-            AppVariables.location = new Location();
-            string _str = "", _temp = "";
-
-            _str = (sender as ListView).SelectedItem.ToString();
-
-            bool flag = true;
-            int index = 0;
-            while (flag)//gets index of cell and item in database
+            i = 0;
+            _enum = _favourites.GetEnumerator();
+            _enum.MoveNext();
+            foreach (var f in _favourites)//populates favourites
             {
-                if (_str[index] != '.')
-                    _temp += _str[index];
-                else
-                    flag = false;
-                index++;
+                AppVariables.favouritesList.Add(new Coords());
+                AppVariables.favouritesList[i].latitude = _enum.Current.Latitude;
+                AppVariables.favouritesList[i].longitude = _enum.Current.Longitude;
+                AppVariables.favouritesList[i].Id = _enum.Current.Id;
+                AppVariables.favouritesList[i].note = _enum.Current.Note;
+                AppVariables.favouritesList[i].IsFav = _enum.Current.IsFavourite;
+                _enum.MoveNext();
+                i++;
             }
-            AppVariables.location.Longitude = AppVariables.coordsList[int.Parse(_temp) - 1].longitude;//passes new coordinates
-            AppVariables.location.Latitude = AppVariables.coordsList[int.Parse(_temp) - 1].latitude;
-            MessagingCenter.Send(this, "gobackSend");//tell main page to swipe us back
-
-            Trytofind trytofind = new Trytofind();
-            trytofind.Check();//checks if there's already destination and calculates distance and new angle for arrow; find it in EntryPage.xaml.cs
         }
     }
 }
