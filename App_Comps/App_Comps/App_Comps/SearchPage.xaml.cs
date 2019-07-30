@@ -17,7 +17,9 @@ namespace App_Comps
         public SearchPage()
         {
             InitializeComponent();
-            MessagingCenter.Subscribe<Searcher>(this, "resetSend", (sender) => { longitudeEntry.Text = ""; latitudeEntry.Text = ""; addressEntry.Text = ""; });
+            //when triggered resets input
+            //triggers only when localization was found succesfully
+            MessagingCenter.Subscribe<Searcher>(this, "resetSend", (sender) => { longitudeEntry.Text = null; latitudeEntry.Text = null; addressEntry.Text = null; });
 
             search = new Searcher();
             search.Receiver();
@@ -51,7 +53,7 @@ namespace App_Comps
 
         async public void Searching()//searches for such input
         {
-            bool _flag = false;
+            bool _flag = false, _flag2 = false;
             if (_lon != null && _lat != null)//there's longitude and latitude entered
             {
                 double _x = Double.Parse(_lat), _y = Double.Parse(_lon);//localization parsed once to double
@@ -65,31 +67,42 @@ namespace App_Comps
             }
             else if (_addr != null)//there's address entered
             {
-                AppVariables.location = new Location();
-                var locations = await Geocoding.GetLocationsAsync(_addr);//looks for location
-                AppVariables.location = locations?.FirstOrDefault();//sets location found or sets null
-                _flag = true;
+                try
+                {
+                    AppVariables.location = new Location();
+                    var locations = await Geocoding.GetLocationsAsync(_addr);//looks for location
+                    AppVariables.location = locations?.FirstOrDefault();//sets location found or sets null
+                    _flag2 = true;
+                }
+                catch(FeatureNotSupportedException fnsEx)
+                {
+                    DependencyService.Get<IMessage>().LongAlert(fnsEx.Message);
+                }
             }
             else//nothing entered just button clicked
             {
 
             }
 
-            if (AppVariables.location != null && _flag)//if there's location found
-            {
-                MessagingCenter.Send(this, "resetSend");//resets input bars
-                var newCoord = new HistoryDatabase();
-                newCoord.latitude = AppVariables.location.Latitude;//sets as new location to go
-                newCoord.longitude = AppVariables.location.Longitude;
-                newCoord.note = null;//not added yet
-                AppVariables.db.Insert(newCoord);//insert location to database
-                MessagingCenter.Send(this, "gobackSend");//tell main page to swipe us back
-
+            if (AppVariables.location != null && _flag || _flag2)//if there's location found
+            {        
                 Trytofind trytofind = new Trytofind();
                 trytofind.Check();//checks if there's already destination and calculates distance and new angle for arrow; find it in EntryPage.xaml.cs
+                MessagingCenter.Send(this, "gobackSend");//tell main page to swipe us back
+                MessagingCenter.Send(this, "resetSend");//resets input bars
+
+                var newCoord = new ArchiveDatabase();
+                newCoord.Latitude = AppVariables.location.Latitude;//saves location to database
+                newCoord.Longitude = AppVariables.location.Longitude;//=||=
+                newCoord.Time = DateTime.Now.Second;//time of saving
+                if(_flag2)
+                {
+                    newCoord.Note = _addr;//saves inputed address as note
+                }
+                AppVariables.db.Insert(newCoord);//insert location to database
             }
             else
-                DependencyService.Get<IMessage>().LongAlert("Wrong coordinates or address");
+                DependencyService.Get<IMessage>().LongAlert("Wrong coordinates or address");//no location found or invalid input
         }
 }
 

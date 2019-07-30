@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="App_Comps.Favourite">
+  <ContentPage.Content>
+      <StackLayout>
+            <Grid Margin="3,20,0,0">
+                <Label Text="Favorite:" FontSize="Large" Grid.Row="0" Grid.Column="0"/>
+                <Button Text="&lt; Go back" BackgroundColor="#FAFAFA" Clicked="OnClick" Grid.Row="0" Grid.Column="1"/>
+            </Grid>
+            <ListView x:Name="archiveList" VerticalOptions="CenterAndExpand">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell Text="{Binding record}" >
+                            <TextCell.ContextActions>
+                                <MenuItem Clicked="OnDelete" Text="Delete" CommandParameter="{Binding .}" IsDestructive="True"/>
+                                <MenuItem Clicked="OnUnfavourite" Text="Unfavourite" CommandParameter="{Binding .}"/>
+                                <MenuItem Clicked="OnChange" Text="Change note" CommandParameter="{Binding .}"/>
+                            </TextCell.ContextActions>
+                        </TextCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+  </ContentPage.Content>
+</ContentPage>

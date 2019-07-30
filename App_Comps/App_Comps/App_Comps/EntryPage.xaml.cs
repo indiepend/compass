@@ -52,7 +52,7 @@ namespace App_Comps
        {
             var _data = e.Reading;
             MessagingCenter.Send(this, "imageSend", -_data.HeadingMagneticNorth);//sends new rotation of compass to EntryPage class
-            MessagingCenter.Send(this, "arrowSend", -_data.HeadingMagneticNorth - AppVariables.alpha);//sends new rotation of arrow
+            MessagingCenter.Send(this, "arrowSend", -_data.HeadingMagneticNorth - AppVariables.Alpha);//sends new rotation of arrow
        }
 
         public static void ToggleCompass()//toggles compass on and off - used in MainActivity class
@@ -77,7 +77,7 @@ namespace App_Comps
 
                 if (newposition != null)
                 {
-                    AppVariables.phoneloc = newposition;//sends position to variables manager as it's needed later
+                    AppVariables.PhoneLoc = newposition;//sends position to variables manager as it's needed later
                     _position = newposition;
                     MessagingCenter.Send(this, "latSend", "lat.: " + _position.Latitude.ToString());//sends new position to show
                     MessagingCenter.Send(this, "longSend", "long.: " + _position.Longitude.ToString());
@@ -92,23 +92,23 @@ namespace App_Comps
     public class Trytofind {//checks if there's already destination and calculates distance and new angle for arrow
         public void Check()
         {
-            if (AppVariables.location != null && AppVariables.phoneloc != null)//if there is destination chosen
+            if (AppVariables.location != null && AppVariables.PhoneLoc != null)//if there is destination chosen
             {
                 MessagingCenter.Send(this, "aimlatSend", "lat.: " + AppVariables.location.Latitude.ToString());//sends new destination
                 MessagingCenter.Send(this, "aimlongSend", "long.: " + AppVariables.location.Longitude.ToString());
 
-                double dist = Location.CalculateDistance(AppVariables.location, AppVariables.phoneloc, DistanceUnits.Kilometers);//calculates distance between user and destination point
-                double y = Location.CalculateDistance(AppVariables.phoneloc, AppVariables.location.Latitude, AppVariables.phoneloc.Longitude, DistanceUnits.Kilometers);//that's additional distance needed to calculate angle
-                AppVariables.alpha = (180 * Math.Acos(y / dist)) / 3.1416;//that result is okay when aim is in second quadrant
-                if (AppVariables.phoneloc.Longitude < AppVariables.location.Longitude)//when result is in first or forth
+                double dist = Location.CalculateDistance(AppVariables.location, AppVariables.PhoneLoc, DistanceUnits.Kilometers);//calculates distance between user and destination point
+                double y = Location.CalculateDistance(AppVariables.PhoneLoc, AppVariables.location.Latitude, AppVariables.PhoneLoc.Longitude, DistanceUnits.Kilometers);//that's additional distance needed to calculate angle
+                AppVariables.Alpha = (180 * Math.Acos(y / dist)) / 3.1416;//that result is okay when aim is in second quadrant
+                if (AppVariables.PhoneLoc.Longitude < AppVariables.location.Longitude)//when result is in first or forth
                 {
-                    if (AppVariables.phoneloc.Latitude > AppVariables.location.Latitude)
-                        AppVariables.alpha += 180;//forth
+                    if (AppVariables.PhoneLoc.Latitude > AppVariables.location.Latitude)
+                        AppVariables.Alpha += 180;//forth
                     else
-                        AppVariables.alpha = -AppVariables.alpha;//first
+                        AppVariables.Alpha = -AppVariables.Alpha;//first
                 }
-                else if (AppVariables.phoneloc.Latitude > AppVariables.location.Latitude)//when result is in third
-                    AppVariables.alpha = 180 - AppVariables.alpha;
+                else if (AppVariables.PhoneLoc.Latitude > AppVariables.location.Latitude)//when result is in third
+                    AppVariables.Alpha = 180 - AppVariables.Alpha;
 
 
                 if (dist > 100)

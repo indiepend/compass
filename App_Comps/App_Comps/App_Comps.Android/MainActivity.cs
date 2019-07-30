@@ -22,12 +22,12 @@ namespace App_Comps.Droid
 
             base.OnCreate(savedInstanceState);
 
+            Rg.Plugins.Popup.Popup.Init(this, savedInstanceState);//init for popups
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
-
+            
             CompassInterface.ToggleCompass();//toggles on compass sensors
-            Position3D.ToggleOrientationSensor();//toggles on orientation sensor
         }
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
@@ -37,6 +37,4 @@ namespace App_Comps.Droid
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
-
-
 }

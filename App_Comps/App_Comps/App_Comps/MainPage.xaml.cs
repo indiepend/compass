@@ -13,7 +13,8 @@ namespace App_Comps
             Children.Add(new HistoryPage());
 
             MessagingCenter.Subscribe<Searcher>(this, "gobackSend", (sender) => { GoToFirstPage(); });//goes to entry page when requested
-            MessagingCenter.Subscribe<Database>(this, "gobackSend", (sender) => { GoToFirstPage(); });
+            MessagingCenter.Subscribe<All>(this, "gobackSend", (sender) => { GoToFirstPage(); });
+            MessagingCenter.Subscribe<Favourite>(this, "gobackSend", (sender) => { GoToFirstPage(); });
         }
 
         public void GoToFirstPage()//as name says
